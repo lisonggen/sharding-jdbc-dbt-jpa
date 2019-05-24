@@ -3,6 +3,7 @@ package com.lisg.sharding.controller;
 import com.dangdang.ddframe.rdb.sharding.keygen.KeyGenerator;
 import com.lisg.sharding.entity.Goods;
 import com.lisg.sharding.repository.GoodsRepository;
+import com.lisg.sharding.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,9 @@ public class GoodsController {
     @Autowired
     private GoodsRepository goodsRepository;
 
+    @Autowired
+    private GoodsService goodsService;
+
     @GetMapping("save")
     public String save(){
         for(int i= 1 ; i <= 40 ; i ++){
@@ -31,33 +35,38 @@ public class GoodsController {
             goods.setGoodsId((long) i);
             goods.setGoodsName( "shangpin" + i);
             goods.setGoodsType((long) (i+1));
-            goodsRepository.save(goods);
+            //goodsRepository.save(goods);
+            goodsService.insert(goods);
         }
         return "success";
     }
 
     @GetMapping("select")
-    public String select(){
-        return goodsRepository.findAll().toString();
+    public List<Goods> select(){
+        //return goodsRepository.findAll().toString();
+        return goodsService.selectAll();
     }
 
     @GetMapping("delete")
-    public void delete(){
-        goodsRepository.deleteAll();
+    public int delete(){
+        //goodsRepository.deleteAll();
+        return goodsService.deleteAll();
     }
 
-    @GetMapping("query1")
-    public Object query1(){
-        return goodsRepository.findAllByGoodsIdBetween(10L, 30L);
+    @GetMapping("queryBetween")
+    public List<Goods> query1(){
+        //return goodsRepository.findAllByGoodsIdBetween(10L, 30L);
+        return goodsService.findAllByGoodsIdBetween(10L, 30L);
     }
 
-    @GetMapping("query2")
+    @GetMapping("queryIn")
     public Object query2(){
         List<Long> goodsIds = new ArrayList<>();
         goodsIds.add(10L);
         goodsIds.add(15L);
         goodsIds.add(20L);
         goodsIds.add(25L);
-        return goodsRepository.findAllByGoodsIdIn(goodsIds);
+        //return goodsRepository.findAllByGoodsIdIn(goodsIds);
+        return goodsService.findAllByGoodsIdIn(goodsIds);
     }
 }

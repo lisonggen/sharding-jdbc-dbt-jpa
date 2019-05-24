@@ -33,6 +33,12 @@ public class DatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgor
     @Autowired
     private Database1Config database1Config;
 
+    /**
+     * SQL中==的规则。
+     * @param availableTargetNames
+     * @param shardingValue
+     * @return
+     */
     @Override
     public String doEqualSharding(Collection<String> availableTargetNames, ShardingValue<Long> shardingValue) {
         Long value = shardingValue.getValue();
@@ -43,6 +49,12 @@ public class DatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgor
         }
     }
 
+    /**
+     * SQL中in的规则。
+     * @param availableTargetNames
+     * @param shardingValue
+     * @return
+     */
     @Override
     public Collection<String> doInSharding(Collection<String> availableTargetNames, ShardingValue<Long> shardingValue) {
         Collection<String> result = new LinkedHashSet<>(availableTargetNames.size());
@@ -56,6 +68,12 @@ public class DatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgor
         return result;
     }
 
+    /**
+     * SQL中between的规则。
+     * @param availableTargetNames
+     * @param shardingValue
+     * @return
+     */
     @Override
     public Collection<String> doBetweenSharding(Collection<String> availableTargetNames,
                                                 ShardingValue<Long> shardingValue) {
